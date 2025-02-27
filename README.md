@@ -52,6 +52,14 @@ PROJECT OVERVIEW
 
 ---
 
+
 **Why This Project:-**
 
 I chose "World's Worst 'Customer Support' Chatbot" because it's a fun, engaging project that builds my full-stack skills. To build an intentionally bad chatbot, I'll use React for the chat interface, Node.js and Express for the API and MongoDB for storing responses. I'll considerably improve my user management skills through strong authentication and security measures and gain large practical cloud hosting experience by deploying the project on Vercel, Heroku and MongoDB Atlas. This project's development of several absurd yet structured chatbot logic components improves my problem-solving and API management abilities, making learning both practical and enjoyable.
+
+
+
+---
+
+
+DEPLOYMENT LINK:- https://s84-customer-care.onrender.com
