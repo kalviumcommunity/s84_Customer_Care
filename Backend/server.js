@@ -19,6 +19,6 @@ app.listen(port, async () => {
     console.log("connected successfully to Database")
   } catch (error) {
     console.error('Failed to start server:', error);
-
+    process.exit(1);
   }
 });
