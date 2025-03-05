@@ -30,6 +30,8 @@ app.listen(PORT, async () => {
     console.log(`Server is running at http://localhost:${PORT}`);
     console.log('connected to DataBase')
   } catch (error) {
-    console.error('Failed to start server:', error);
+    console.error('Failed to start server:', error)
+    process.exit(1);
+
   }
 });
