@@ -1,6 +1,47 @@
-.center {
+/* Ensure the container is centered horizontally and vertically */
+.landing-container {
+  height: 100vh; /* Full viewport height */
   display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+  flex-direction: column;
+  justify-content: center; /* Center vertically */
+  align-items: center; /* Center horizontally */
+  text-align: center;
+  background-color: #1a1a1a; /* Dark background */
+  color: white;
+  padding: 20px;
+}
+
+/* Style the heading */
+.landing-title {
+  font-size: 4rem; /* Bigger title */
+  font-weight: bold;
+  color: #facc15; /* Yellow text */
+  margin-bottom: 20px;
+}
+
+/* Style the description text */
+.landing-description {
+  font-size: 1.5rem; /* Larger text */
+  max-width: 700px;
+  line-height: 1.8;
+  margin-bottom: 30px;
+}
+
+/* Style the button */
+.landing-button {
+  background-color: #facc15; /* Yellow */
+  color: #1a1a1a; /* Dark text */
+  padding: 16px 32px;
+  font-size: 1.5rem; /* Bigger button text */
+  font-weight: bold;
+  border: none;
+  border-radius: 40px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+/* Button hover effect */
+.landing-button:hover {
+  background-color: #eab308; /* Darker yellow */
+  transform: scale(1.1);
 }
