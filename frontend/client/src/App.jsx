@@ -1,13 +1,16 @@
-import React from 'react'
-import {Route,Routes} from 'react-router-dom'
-import Home from './pages/home'
+import React from 'react';
+import { Route, Routes } from 'react-router-dom';
+import LandingPage from './pages/landhome'; // Import LandingPage
+import ChatPage from './pages/chatpage'; // Import ChatPage
 
 export default function App() {
   return (
-    <div>
-      <Routes>
-      <Route path='/' element = {<Home/>}/>
-      </Routes>
-    </div>
-  )
+    <Routes>
+      {/* Route for Landing Page */}
+      <Route path="/" element={<LandingPage />} />
+
+      {/* Route for Chat Page */}
+      <Route path="/chat" element={<ChatPage />} />
+    </Routes>
+  );
 }
