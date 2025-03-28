@@ -25,15 +25,29 @@ export default function LandingPage() {
         Tired of getting helpful responses? Look no further! This chatbot guarantees to frustrate, confuse, and amuse you with the worst customer support ever. Ask anything, and get the most absurd responses possible.
       </motion.p>
 
-      <motion.button
-        className="landing-button"
-        onClick={() => navigate("/chat")}
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5 }}
-      >
-        Start Chat
-      </motion.button>
+      {/* Buttons Container */}
+      <div className="button-container">
+
+        <motion.button
+          className="landing-button signup-button"
+          onClick={() => navigate("/signup")}
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          Signup
+        </motion.button>
+
+        <motion.button
+          className="landing-button login-button"
+          onClick={() => navigate("/login")}
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          Login
+        </motion.button>
+      </div>
     </div>
   );
 }

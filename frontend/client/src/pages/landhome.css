@@ -27,21 +27,49 @@
   margin-bottom: 30px;
 }
 
-/* Style the button */
+/* Container for buttons */
+.button-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Add space between buttons */
+  width: 100%;
+  align-items: center;
+}
+
+/* General Button Styling */
 .landing-button {
   background-color: #facc15; /* Yellow */
   color: #1a1a1a; /* Dark text */
-  padding: 16px 32px;
+  padding: 16px 40px;
   font-size: 1.5rem; /* Bigger button text */
   font-weight: bold;
   border: none;
   border-radius: 40px;
   cursor: pointer;
   transition: background 0.3s ease, transform 0.2s ease;
+  width: 250px; /* Same width for all buttons */
+  text-align: center;
 }
 
-/* Button hover effect */
+/* Hover effect */
 .landing-button:hover {
   background-color: #eab308; /* Darker yellow */
   transform: scale(1.1);
+}
+
+/* Signup and Login button specific styling */
+.signup-button {
+  background-color: #f87171; /* Soft red */
+}
+
+.signup-button:hover {
+  background-color: #dc2626; /* Darker red */
+}
+
+.login-button {
+  background-color: #4ade80; /* Green */
+}
+
+.login-button:hover {
+  background-color: #22c55e; /* Darker green */
 }
