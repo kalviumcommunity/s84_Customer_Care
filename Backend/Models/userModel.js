@@ -18,7 +18,7 @@ const userSchema = new Schema(
       unique: true,
     },
 
-    userName: {
+    username: {
       type: String,
       required: true,
       unique: true,
