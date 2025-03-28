@@ -10,17 +10,24 @@ export default function ChatPage() {
   const handleSend = () => {
     if (input.trim() === "") return;
 
-    setMessages([...messages, { text: input, sender: "user" }]);
+    // Add user input to messages
+    setMessages((prev) => [...prev, { text: input, sender: "user" }]);
 
     // Fake bot response after a delay
     setTimeout(() => {
       setMessages((prev) => [
         ...prev,
-        { text: "I have no idea how to help you!", sender: "bot" }
+        { text: "I don't wanna help you", sender: "bot" }
       ]);
     }, 1000);
 
     setInput(""); // Clear input
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSend();
+    }
   };
 
   return (
@@ -46,6 +53,7 @@ export default function ChatPage() {
           placeholder="Type a message..."
           value={input}
           onChange={(e) => setInput(e.target.value)}
+          onKeyPress={handleKeyPress}
         />
         <button onClick={handleSend}>Send</button>
       </div>
