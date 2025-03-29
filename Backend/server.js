@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const userRoutes = require("./Routes/userRoutes");
+const jokeRoutes = require("./Routes/jokeRoutes"); // ✅ Import joke routes
 
 const app = express();
 
@@ -11,6 +12,7 @@ app.use(cors()); // ✅ Enable CORS to allow frontend requests
 
 // ✅ Use Routes
 app.use("/users", userRoutes);
+app.use("/jokes", jokeRoutes); // ✅ Add joke routes
 
 mongoose
   .connect("mongodb://127.0.0.1:27017/customerSupportDB", { useNewUrlParser: true, useUnifiedTopology: true })
@@ -18,4 +20,4 @@ mongoose
   .catch((err) => console.error("❌ MongoDB connection error:", err));
 
 const PORT = process.env.PORT || 8000;
-app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));  

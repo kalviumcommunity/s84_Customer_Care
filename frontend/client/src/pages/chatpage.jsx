@@ -1,5 +1,6 @@
 import { useState } from "react";
-import "./chatpage.css"; // Import the new CSS file
+import axios from "axios";
+import "./chatpage.css";
 
 export default function ChatPage() {
   const [messages, setMessages] = useState([
@@ -7,19 +8,30 @@ export default function ChatPage() {
   ]);
   const [input, setInput] = useState("");
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (input.trim() === "") return;
 
-    // Add user input to messages
+    // Add user message
     setMessages((prev) => [...prev, { text: input, sender: "user" }]);
 
-    // Fake bot response after a delay
-    setTimeout(() => {
+    try {
+      // Fetch joke from API
+      const response = await axios.get("https://icanhazdadjoke.com/", {
+        headers: { Accept: "application/json" }
+      });
+
+      // Add API response to messages
       setMessages((prev) => [
         ...prev,
-        { text: "I don't wanna help you", sender: "bot" }
+        { text: response.data.joke, sender: "bot" }
       ]);
-    }, 1000);
+    } catch (error) {
+      console.error("Error fetching joke:", error);
+      setMessages((prev) => [
+        ...prev,
+        { text: "Oops! I'm too lazy to fetch a joke 😴", sender: "bot" }
+      ]);
+    }
 
     setInput(""); // Clear input
   };
@@ -38,9 +50,7 @@ export default function ChatPage() {
         {messages.map((msg, index) => (
           <div
             key={index}
-            className={`message ${
-              msg.sender === "bot" ? "bot-message" : "user-message"
-            }`}
+            className={`message ${msg.sender === "bot" ? "bot-message" : "user-message"}`}
           >
             {msg.text}
           </div>
