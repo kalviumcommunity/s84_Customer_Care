@@ -4,7 +4,7 @@ import ChatPage from "./pages/chatpage";
 import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
 
-export default function App() {
+export default function App() { // ✅ Ensure 'export default' is here
   return (
     <Routes>
       <Route path="/" element={<LandingPage />} />
