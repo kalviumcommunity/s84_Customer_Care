@@ -47,6 +47,16 @@ export default function LandingPage() {
         >
           Login
         </motion.button>
+
+        <motion.button
+          className="landing-button users-button"
+          onClick={() => navigate("/users")}
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          Manage Users
+        </motion.button>
       </div>
     </div>
   );
