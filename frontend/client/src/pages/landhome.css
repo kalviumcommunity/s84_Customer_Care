@@ -73,3 +73,12 @@
 .login-button:hover {
   background-color: #22c55e; /* Darker green */
 }
+
+/* Users button specific styling */
+.users-button {
+  background-color: #4a90e2; /* Blue */
+}
+
+.users-button:hover {
+  background-color: #357abd; /* Darker blue */
+}
