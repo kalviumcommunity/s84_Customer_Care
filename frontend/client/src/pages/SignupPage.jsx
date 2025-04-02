@@ -13,6 +13,7 @@ const Signup = () => {
     email: "",
     username: "",
     age: "",
+    password: "",
   });
 
   // Handle input change
@@ -60,6 +61,13 @@ const Signup = () => {
         <input type="email" name="email" placeholder="Email" onChange={handleChange} className="signup-input" />
         <input type="text" name="username" placeholder="Username" onChange={handleChange} className="signup-input" />
         <input type="number" name="age" placeholder="Age" onChange={handleChange} className="signup-input" />
+        <input 
+          type="password" 
+          name="password" 
+          placeholder="Password" 
+          onChange={handleChange} 
+          className="signup-input" 
+        />
 
         <div className="button-group">
           <button className="back-button" onClick={() => navigate(-1)}>Go Back</button>
