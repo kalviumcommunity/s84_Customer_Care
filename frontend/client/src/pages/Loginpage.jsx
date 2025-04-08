@@ -28,7 +28,7 @@ const LoginPage = () => {
     const result = await login(formData.username, formData.password);
     
     if (result.success) {
-      navigate("/");
+      navigate("/chat");
     } else {
       setError(result.error);
     }

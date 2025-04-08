@@ -21,6 +21,9 @@ html, body {
   background-color: #1a1a1a;
   color: white;
   padding: 20px;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 /* Login form box */
@@ -34,7 +37,9 @@ html, body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-align: center; /* Added for text centering */
+  text-align: center;
+  position: relative;
+  z-index: 1;
 }
 
 .login-form h2 {
@@ -42,11 +47,11 @@ html, body {
   font-size: 2rem;
   font-weight: bold;
   margin-bottom: 1.5rem;
-  width: 100%; /* Ensure full width for proper centering */
+  width: 100%;
 }
 
 /* Input fields */
-.login-input {
+input {
   width: 100%;
   padding: 12px 20px;
   margin: 8px 0;
@@ -55,11 +60,11 @@ html, body {
   background-color: #333;
   color: white;
   font-size: 1rem;
-  text-align: center; /* Center text in inputs */
+  text-align: center;
 }
 
-.login-input::placeholder {
-  text-align: center; /* Center placeholder text */
+input::placeholder {
+  text-align: center;
   color: #aaa;
 }
 
@@ -69,7 +74,7 @@ html, body {
   font-size: 0.9rem;
   min-height: 20px;
   margin: 0.5rem 0;
-  width: 100%; /* Ensure full width for proper centering */
+  width: 100%;
 }
 
 /* Button styles */
@@ -93,6 +98,29 @@ html, body {
   transition: all 0.3s ease;
 }
 
+.back-button {
+  background-color: #f87171;
+  color: white;
+}
+
+.back-button:hover {
+  background-color: #dc2626;
+}
+
+.login-button {
+  background-color: #4ade80;
+  color: white;
+}
+
+.login-button:hover {
+  background-color: #22c55e;
+}
+
+.login-button:disabled {
+  background-color: #666;
+  cursor: not-allowed;
+}
+
 /* Responsive adjustments */
 @media (max-width: 480px) {
   .login-form {
@@ -103,7 +131,7 @@ html, body {
     font-size: 1.8rem;
   }
   
-  .login-input {
+  input {
     padding: 10px 15px;
   }
-}
+} 

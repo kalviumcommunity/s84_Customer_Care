@@ -5,6 +5,7 @@ import LoginPage from './pages/Loginpage';
 import SignupPage from './pages/SignupPage';
 import UserManagement from './pages/UserManagement';
 import LandHome from './pages/LandHome';
+import ChatPage from './pages/chatpage';
 
 // Protected Route component
 const ProtectedRoute = ({ children }) => {
@@ -28,6 +29,14 @@ function App() {
         <Route path="/" element={<LandHome />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
+        <Route
+          path="/chat"
+          element={
+            <ProtectedRoute>
+              <ChatPage />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/users"
           element={
