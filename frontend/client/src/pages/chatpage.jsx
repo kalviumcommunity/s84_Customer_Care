@@ -1,10 +1,17 @@
+// File: ChatPage.jsx
+
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useAuth } from "../context/AuthContext"; // <-- Import auth context
 import "./chatpage.css";
 
 export default function ChatPage() {
+  const { user, logout } = useAuth(); // <-- Use auth
+  const navigate = useNavigate();
+
   const [messages, setMessages] = useState([
-    { text: "Welcome! How can I *not* help you today?", sender: "bot" }
+    { text: "Welcome! How can I *not* help you today?", sender: "bot", senderName: "Chatbot" }
   ]);
   const [input, setInput] = useState("");
 
@@ -12,7 +19,10 @@ export default function ChatPage() {
     if (input.trim() === "") return;
 
     // Add user message
-    setMessages((prev) => [...prev, { text: input, sender: "user" }]);
+    setMessages((prev) => [
+      ...prev,
+      { text: input, sender: "user", senderName: user?.username || "You" }
+    ]);
 
     try {
       // Fetch joke from API
@@ -20,16 +30,16 @@ export default function ChatPage() {
         headers: { Accept: "application/json" }
       });
 
-      // Add API response to messages
+      // Add bot response
       setMessages((prev) => [
         ...prev,
-        { text: response.data.joke, sender: "bot" }
+        { text: response.data.joke, sender: "bot", senderName: "Chatbot" }
       ]);
     } catch (error) {
       console.error("Error fetching joke:", error);
       setMessages((prev) => [
         ...prev,
-        { text: "Oops! I'm too lazy to fetch a joke 😴", sender: "bot" }
+        { text: "Oops! I'm too lazy to fetch a joke 😴", sender: "bot", senderName: "Chatbot" }
       ]);
     }
 
@@ -42,6 +52,11 @@ export default function ChatPage() {
     }
   };
 
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
+
   return (
     <div className="chat-container">
       <h1 className="text-4xl font-bold text-yellow-400">World's Worst Chatbot</h1>
@@ -52,7 +67,8 @@ export default function ChatPage() {
             key={index}
             className={`message ${msg.sender === "bot" ? "bot-message" : "user-message"}`}
           >
-            {msg.text}
+            <div>{msg.text}</div>
+            <div className="sender-label">sent by {msg.senderName}</div>
           </div>
         ))}
       </div>
@@ -66,6 +82,12 @@ export default function ChatPage() {
           onKeyPress={handleKeyPress}
         />
         <button onClick={handleSend}>Send</button>
+      </div>
+
+      <div className="logout-container">
+        <button className="logout-button" onClick={handleLogout}>
+          Logout
+        </button>
       </div>
     </div>
   );

@@ -1,20 +1,33 @@
 const express = require("express");
 const router = express.Router();
-const User = require("../models/User"); // Updated to use the correct path with lowercase 'm'
+const User = require("../models/User");
 const jwt = require('jsonwebtoken');
 const auth = require('../middleware/auth');
 
 router.use(express.json());
 
+router.get("/all", async (req, res) => {
+  try {
+    const users = await User.find(); // Query to fetch all users
+    if (users.length > 0) {
+      res.status(200).json({ users });
+    } else {
+      res.status(404).json({ message: "No users found" });
+    }
+  } catch (error) {
+    console.error("❌ Error fetching users:", error);
+    res.status(500).json({ message: "Error fetching users" });
+  }
+});
+
 // Public routes (no auth required)
 router.post("/signup", async (req, res) => {
   console.log("🟢 Received Signup Request:");
   console.log("Request Headers:", req.headers);
-  console.log("Request Body:", req.body); // ✅ Log the received data
+  console.log("Request Body:", req.body);
 
   const { firstName, lastName, email, username, age, password } = req.body;
 
-  // 🔹 Check if all fields are provided
   if (!firstName || !lastName || !email || !username || !age || !password) {
     console.log("❌ Missing fields");
     return res.status(400).json({ success: false, message: "All fields are required" });
@@ -32,7 +45,7 @@ router.post("/signup", async (req, res) => {
     console.log("✅ Creating new user...");
     const newUser = new User({ firstName, lastName, email, username, age, password });
 
-    await newUser.save(); // ✅ Save to MongoDB
+    await newUser.save();
 
     console.log("🎉 User registered successfully!");
     res.status(201).json({ success: true, message: "User registered successfully!", user: { ...newUser.toObject(), password: undefined } });
@@ -61,7 +74,6 @@ router.post("/login", async (req, res) => {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    // Generate JWT token
     const token = jwt.sign(
       { userId: user._id },
       process.env.JWT_SECRET,

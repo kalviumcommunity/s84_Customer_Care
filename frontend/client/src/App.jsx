@@ -1,24 +1,18 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
+
 import LoginPage from './pages/Loginpage';
 import SignupPage from './pages/SignupPage';
 import UserManagement from './pages/UserManagement';
 import LandHome from './pages/LandHome';
 import ChatPage from './pages/chatpage';
 
-// Protected Route component
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (!user) {
-    return <Navigate to="/login" />;
-  }
-
+  if (loading) return <div>Loading...</div>;
+  if (!user) return <Navigate to="/login" replace />;
   return children;
 };
 

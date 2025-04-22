@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "./UserManagement.css";
+import './UserManagement.css';
 
 const UserManagement = () => {
   const [users, setUsers] = useState([]);
+  const [error, setError] = useState(null);
   const [editingUser, setEditingUser] = useState(null);
   const [formData, setFormData] = useState({
     firstName: "",
@@ -13,29 +14,45 @@ const UserManagement = () => {
     age: "",
   });
   const [password, setPassword] = useState("");
-  const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [actionType, setActionType] = useState(null); // 'edit' or 'delete'
-  const [selectedUserId, setSelectedUserId] = useState(null);
-  const [error, setError] = useState("");
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
 
-  // Fetch all users
+  // Fetch users from the API
   const fetchUsers = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/users");
-      setUsers(response.data);
+      // Update to the correct endpoint to fetch all users
+      const response = await axios.get("http://localhost:8000/users/all");
+      console.log("Users API Response:", response.data);
+  
+      // Check if the response is an array or contains user data in some other way
+      if (Array.isArray(response.data)) {
+        setUsers(response.data); // If it's an array, set users
+      } else if (response.data.users && Array.isArray(response.data.users)) {
+        setUsers(response.data.users); // If 'users' is an array, set users
+      } else {
+        setError("No users found in the response.");
+        setUsers([]); // Set users to an empty array if the response is invalid
+      }
     } catch (error) {
       console.error("Error fetching users:", error);
-      alert("Failed to fetch users");
+      setError("Failed to fetch users.");
+      setUsers([]); // Set users to an empty array in case of error
     }
   };
+  
 
+  // Effect to fetch users on mount
   useEffect(() => {
     fetchUsers();
   }, []);
 
-  // Handle input change
+  // Handle input changes for form fields
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
   // Handle password input change
@@ -43,81 +60,65 @@ const UserManagement = () => {
     setPassword(e.target.value);
   };
 
-  // Show password verification modal
-  const showPasswordVerification = (userId, type) => {
-    setSelectedUserId(userId);
-    setActionType(type);
-    setShowPasswordModal(true);
-    setPassword("");
-    setError("");
-    
-    // If editing, set the form data
-    if (type === 'edit') {
-      const user = users.find(u => u._id === userId);
-      setFormData({
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        username: user.username,
-        age: user.age,
-      });
-    }
-  };
-
-  // Verify password and proceed with action
-  const verifyPasswordAndProceed = async () => {
-    try {
-      // First verify the password
-      const verifyResponse = await axios.post(`http://localhost:8000/users/verify-password`, {
-        userId: selectedUserId,
-        password: password
-      });
-      
-      if (verifyResponse.data.verified) {
-        // Password verified, proceed with the action
-        if (actionType === 'edit') {
-          setEditingUser(selectedUserId);
-        } else if (actionType === 'delete') {
-          handleDelete(selectedUserId);
-        }
-        setShowPasswordModal(false);
-      } else {
-        setError("Incorrect password. Please try again.");
-      }
-    } catch (error) {
-      console.error("Password verification error:", error);
-      setError("Password verification failed. Please try again.");
-    }
-  };
-
-  // Handle edit user
+  // Handle edit button click
   const handleEdit = (user) => {
-    showPasswordVerification(user._id, 'edit');
+    setEditingUser(user);
+    setFormData({
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      username: user.username,
+      age: user.age,
+    });
   };
 
-  // Handle update user
-  const handleUpdate = async (userId) => {
+  // Handle user update
+  const handleUpdate = async (user) => {
     try {
-      await axios.put(`http://localhost:8000/users/${userId}`, formData);
-      setEditingUser(null);
-      fetchUsers();
-      alert("User updated successfully!");
+      const response = await axios.put(
+        `http://localhost:8000/users/${user._id}`,
+        formData
+      );
+      console.log("User updated:", response.data);
+      fetchUsers(); // Refresh user list
+      setEditingUser(null); // Close the edit modal
     } catch (error) {
       console.error("Error updating user:", error);
-      alert("Failed to update user");
+      setError("Failed to update user.");
     }
   };
 
-  // Handle delete user
+  // Handle password verification and proceed with action
+  const verifyPasswordAndProceed = () => {
+    if (password === "correct-password") { // Replace with actual verification
+      if (actionType === "edit") {
+        handleUpdate(editingUser);
+      } else if (actionType === "delete") {
+        handleDelete(editingUser._id);
+      }
+    } else {
+      setError("Incorrect password.");
+    }
+  };
+
+  // Handle delete button click
   const handleDelete = async (userId) => {
     try {
       await axios.delete(`http://localhost:8000/users/${userId}`);
-      fetchUsers();
-      alert("User deleted successfully!");
+      console.log("User deleted:", userId);
+      fetchUsers(); // Refresh user list after deletion
+      setShowPasswordModal(false); // Close the modal
     } catch (error) {
       console.error("Error deleting user:", error);
-      alert("Failed to delete user");
+      setError("Failed to delete user.");
     }
+  };
+
+  // Show password verification modal for delete/edit
+  const showPasswordVerification = (userId, type) => {
+    setActionType(type); // 'edit' or 'delete'
+    setEditingUser(users.find((user) => user._id === userId));
+    setShowPasswordModal(true);
   };
 
   return (
@@ -126,6 +127,8 @@ const UserManagement = () => {
         <h1>User Management</h1>
         <p>Manage and monitor user accounts</p>
       </div>
+
+      {error && <div className="error-message">{error}</div>} {/* Display error message */}
 
       <table className="users-table">
         <thead>
@@ -138,7 +141,7 @@ const UserManagement = () => {
           </tr>
         </thead>
         <tbody>
-          {users.map((user) => (
+          {(users || []).map((user) => (
             <tr key={user._id}>
               <td>{`${user.firstName} ${user.lastName}`}</td>
               <td>{user.email}</td>
@@ -154,7 +157,7 @@ const UserManagement = () => {
                   </button>
                   <button
                     className="delete-button"
-                    onClick={() => showPasswordVerification(user._id, 'delete')}
+                    onClick={() => showPasswordVerification(user._id, "delete")}
                   >
                     Delete
                   </button>
@@ -170,7 +173,7 @@ const UserManagement = () => {
         <div className="modal-overlay">
           <div className="modal-content">
             <h3 className="modal-header">
-              {actionType === 'edit' ? 'Edit User' : 'Delete User'}
+              {actionType === "edit" ? "Edit User" : "Delete User"}
             </h3>
             <p>Please enter your password to confirm this action:</p>
             <input
@@ -265,4 +268,4 @@ const UserManagement = () => {
   );
 };
 
-export default UserManagement; 
+export default UserManagement;
