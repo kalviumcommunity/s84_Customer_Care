@@ -80,6 +80,12 @@ router.post("/login", async (req, res) => {
       { expiresIn: '24h' }
     );
 
+    res.cookie("username", username, {
+      httpOnly: true, // Prevent client-side JavaScript from accessing the cookie
+      secure: process.env.NODE_ENV === "production", // Use secure cookies in production
+      maxAge: 24 * 60 * 60 * 1000, // 1 day
+    });
+
     res.status(200).json({
       user: {
         _id: user._id,
@@ -95,6 +101,16 @@ router.post("/login", async (req, res) => {
     console.error('Login error:', error);
     res.status(500).json({ error: 'Server error' });
   }
+});
+
+router.post("/logout", (req, res) => {
+  // Clear the username cookie
+  res.clearCookie("username", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+  });
+
+  res.status(200).json({ message: "Logout successful" });
 });
 
 // Protected routes (auth required)
